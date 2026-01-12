@@ -1,0 +1,27 @@
+[build]
+builder = "railpack"
+buildCommand = "pip install --upgrade pip && pip install -r requirements.txt"
+
+[deploy]
+startCommand = "gunicorn main:app -k uvicorn.workers.UvicornWorker -w 4 -b 0.0.0.0:${PORT:-8000} --timeout 60 --keep-alive 15 --log-level info --access-logfile - --error-logfile -"
+watchPatterns = ["main.py", "requirements.txt", "api.py", "service.py"]
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[deploy.teardown]
+enabled = true
+overlapSeconds = 15
+drainingSeconds = 45
+
+[healthcheck]
+path = "/health"
+timeoutSeconds = 10
+intervalSeconds = 30
+
+[regions]
+primary = "singapore"
+
+[resources]
+cpu = 8
+memory = 8192
+
