@@ -43,3 +43,11 @@ class ChatForMapping:
         method: Optional[Method] = Field(None, description="추출 방법의 enum 값 (ESPRESSO, FILTER, COLD_BREW, ETC 중 하나)")
         method_text: Optional[str] = Field(None, description="추출 방법의 원문(사용자 입력에 그대로 있던 표현, 예: '에스프레소', '필터')")
         tasting_notes: list[str] = Field(default=[], max_length=5, description="맛, 향 등 테이스팅 노트 (최대 5개)")
+
+class ChatForSensoryGuide:
+    class Request(BaseModel):
+        message: str
+
+    class Response(BaseModel):
+        mapping_result: ChatForMapping.Response = Field(description="매핑 결과")
+        sensory_guide: str = Field(description="센서리 가이드 메시지")

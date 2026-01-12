@@ -1,8 +1,9 @@
 from langchain.output_parsers import PydanticOutputParser
-from schema import ChatForMapping
+from schema import ChatForMapping, ChatForSensoryGuide
 
 parser_map = {
     "mapping": PydanticOutputParser(pydantic_object=ChatForMapping.Response),
+    "sensory_guide": PydanticOutputParser(pydantic_object=ChatForSensoryGuide.Response),
 }
 
 def get_parser(label: str) -> PydanticOutputParser | None:
