@@ -91,5 +91,6 @@ async def run_agent(input_prompt: str, web_search: bool = False, label: str = "m
         if isinstance(result, dict) and "output" in result:
             return result["output"]
         return str(result)
-    except InfrastructureException as e:
+    except Exception as e:
+        # 모든 예외를 InfrastructureException으로 변환
         raise InfrastructureException(f"Agent 실행 실패: {e}") from e

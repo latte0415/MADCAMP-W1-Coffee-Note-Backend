@@ -10,7 +10,7 @@ from infra.langchain.config.llm import get_llm
 from infra.langchain.config.prompt import get_prompt
 from infra.langchain.config.executor import ainvoke_runnable
 from infra.langchain.config.parser import get_parser
-from exceptions import ChainExecutionException, InfrastructureException
+from exceptions import ChainExecutionException
 
 
 def get_chain(label: str = "test", input_variables: dict[str, Any] | None = None) -> Runnable:
@@ -61,6 +61,6 @@ async def run_chain(
             step_label=label
         )
         return result
-    except InfrastructureException as e:
-        # InfrastructureException을 ChainExecutionException으로 래핑
+    except Exception as e:
+        # 모든 예외를 ChainExecutionException으로 변환 (InfrastructureException 포함)
         raise ChainExecutionException(f"체인 실행 실패 (label: {label}): {e}") from e

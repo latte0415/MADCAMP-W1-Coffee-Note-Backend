@@ -1,7 +1,7 @@
 from infra.langchain.runnables.chain import run_chain
 from infra.langchain.runnables.agent import run_agent
 from schema import ChatForMapping
-from exceptions import ServiceException, ChainExecutionException
+from exceptions import ServiceException
 
 class AIService:
     async def chat(self, input_prompt: str) -> str:
@@ -24,8 +24,8 @@ class AIService:
             if hasattr(result, 'content'):
                 return result.content
             return str(result)
-        except ChainExecutionException as e:
-            # Infrastructure 레이어 예외를 Service 레이어 예외로 변환
+        except Exception as e:
+            # 모든 예외를 ServiceException으로 변환 (InfrastructureException, ChainExecutionException 포함)
             raise ServiceException(f"AI 서비스 처리 실패: {e}") from e
     
     async def chat_for_mapping(self, input_prompt: str) -> ChatForMapping.Response:
@@ -60,6 +60,6 @@ class AIService:
                 input_variables={"input_prompt": input_prompt, "web_search_result": enriched_prompt}
             )
             return result
-        except ChainExecutionException as e:
-            # Infrastructure 레이어 예외를 Service 레이어 예외로 변환
+        except Exception as e:
+            # 모든 예외를 ServiceException으로 변환 (InfrastructureException, ChainExecutionException 포함)
             raise ServiceException(f"AI 매핑 서비스 처리 실패: {e}") from e
