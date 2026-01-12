@@ -122,7 +122,7 @@ POST /chat-for-mapping
 | process_text | string | ❌ | 가공 방식의 원문 (사용자 입력에 그대로 있던 표현, 예: "워시드", "내추럴") |
 | roasting_point | enum | ❌ | 로스팅 지점의 enum 값 (`LIGHT`, `MEDIUM`, `MEDIUM_DARK`, `DARK`, `ETC` 중 하나) |
 | roasting_point_text | string | ❌ | 로스팅 지점의 원문 (사용자 입력에 그대로 있던 표현, 예: "라이트", "미디움") |
-| method | enum | ❌ | 추출 방법의 enum 값 (`ESPRESSO`, `FILTER`, `COLD_BREW`, `OTHER` 중 하나) |
+| method | enum | ❌ | 추출 방법의 enum 값 (`ESPRESSO`, `FILTER`, `COLD_BREW`, `ETC` 중 하나) |
 | method_text | string | ❌ | 추출 방법의 원문 (사용자 입력에 그대로 있던 표현, 예: "에스프레소", "필터") |
 | tasting_notes | string[] | ✅ | 맛, 향 등 테이스팅 노트 (최대 5개) |
 
@@ -146,7 +146,7 @@ POST /chat-for-mapping
 - `ESPRESSO`: 에스프레소
 - `FILTER`: 필터
 - `COLD_BREW`: 콜드브루
-- `OTHER`: 기타
+- `ETC`: 기타
 
 **상태 코드**
 - `200 OK`: 요청 성공

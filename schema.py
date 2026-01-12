@@ -20,7 +20,7 @@ class Method(str, Enum):
     ESPRESSO = "ESPRESSO"
     FILTER = "FILTER"
     COLD_BREW = "COLD_BREW"
-    OTHER = "OTHER"
+    ETC = "ETC"
 
 class ChatTest:
     class Request(BaseModel):
@@ -40,6 +40,6 @@ class ChatForMapping:
         process_text: Optional[str] = Field(None, description="가공 방식의 원문(사용자 입력에 그대로 있던 표현, 예: '워시드', '내추럴')")
         roasting_point: Optional[RoastingPoint] = Field(None, description="추출 지점의 enum 값 (LIGHT, MEDIUM, MEDIUM_DARK, DARK, ETC 중 하나)")
         roasting_point_text: Optional[str] = Field(None, description="추출 지점의 원문(사용자 입력에 그대로 있던 표현, 예: '라이트', '미디움')")
-        method: Optional[Method] = Field(None, description="추출 방법의 enum 값 (ESPRESSO, FILTER, COLD_BREW, OTHER 중 하나)")
+        method: Optional[Method] = Field(None, description="추출 방법의 enum 값 (ESPRESSO, FILTER, COLD_BREW, ETC 중 하나)")
         method_text: Optional[str] = Field(None, description="추출 방법의 원문(사용자 입력에 그대로 있던 표현, 예: '에스프레소', '필터')")
         tasting_notes: list[str] = Field(default=[], max_length=5, description="맛, 향 등 테이스팅 노트 (최대 5개)")
