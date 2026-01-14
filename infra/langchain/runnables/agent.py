@@ -8,11 +8,50 @@ from typing import Any
 from langchain_core.runnables import Runnable
 from langchain.agents import create_react_agent, AgentExecutor
 from langchain import hub
+from langchain_core.exceptions import OutputParserException
 from infra.langchain.config.llm import get_llm
 from infra.langchain.config.executor import ainvoke_runnable
 from infra.langchain.config.tools import get_web_search_tools
 from infra.langchain.config.prompt import get_agent_prompt
 from exceptions import InfrastructureException
+
+
+def handle_parsing_error(error: OutputParserException) -> str:
+    """
+    파싱 에러 발생 시 LLM의 원본 출력을 반환합니다.
+    
+    Args:
+        error: OutputParserException 객체
+    
+    Returns:
+        LLM의 원본 출력 문자열
+    """
+    # 에러 객체의 llm_output 속성 확인 시도
+    llm_output = getattr(error, 'llm_output', None)
+    if llm_output:
+        # llm_output이 문자열이면 그대로 반환
+        if isinstance(llm_output, str):
+            return llm_output
+        # 리스트인 경우 첫 번째 요소의 text 속성 확인
+        if isinstance(llm_output, list) and len(llm_output) > 0:
+            first_output = llm_output[0]
+            if hasattr(first_output, 'text'):
+                return first_output.text
+            if isinstance(first_output, str):
+                return first_output
+    
+    # 에러 메시지에서 LLM 출력 추출 시도
+    error_str = str(error)
+    if "Could not parse LLM output:" in error_str:
+        # 에러 메시지에서 LLM 출력 부분 추출 (백틱 사이의 내용)
+        start_idx = error_str.find("`") + 1
+        end_idx = error_str.rfind("`")
+        if start_idx > 0 and end_idx > start_idx:
+            llm_output = error_str[start_idx:end_idx]
+            return llm_output
+    
+    # 추출 실패 시 기본 메시지 반환
+    return f"파싱 에러 발생: {error_str}"
 
 
 def get_agent(web_search: bool = False, label: str = "mapping") -> Runnable:
@@ -44,7 +83,7 @@ def get_agent(web_search: bool = False, label: str = "mapping") -> Runnable:
         agent=agent, 
         tools=tools, 
         verbose=True, 
-        handle_parsing_errors=True,
+        handle_parsing_errors=handle_parsing_error,
         max_iterations=3,
         max_execution_time=30,
     )
