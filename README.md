@@ -24,13 +24,14 @@
 
 ## 🧠 LangChain 워크플로우
 
-본 서비스는 **ReAct Agent**와 **LCEL Chain**을 결합한 2단계 하이브리드 로직을 사용합니다.
+본 서비스는 **Function Calling Agent**와 **LCEL Chain**을 결합한 2단계 하이브리드 로직을 사용합니다.
 
-### 1. ReAct Agent (정보 수집 단계)
+### 1. Function Calling Agent (정보 수집 단계)
 - **역할**: 사용자가 입력한 커피 정보를 바탕으로 부족한 지식이나 최신 정보를 웹에서 검색하여 보완합니다.
-- **에이전트**: `create_react_agent` (ReAct 방식)
+- **에이전트**: `create_openai_tools_agent` (Function Calling 방식)
 - **도구 (Tools)**: `TavilySearchResults` (실시간 웹 검색)
-- **작동**: 사용자의 질문을 분석하여 검색이 필요한 경우 웹 검색을 수행하고, 수집된 정보를 정리하여 다음 단계로 전달합니다.
+- **작동**: OpenAI의 Function Calling 기능을 활용하여 구조화된 방식으로 도구를 호출하고, 수집된 정보를 정리하여 다음 단계로 전달합니다.
+- **장점**: 텍스트 파싱 기반의 ReAct 방식 대비 파싱 에러가 거의 발생하지 않아 안정성이 크게 향상되었습니다.
 
 ### 2. LCEL Chain (구조화 및 가이드 생성 단계)
 - **역할**: 수집된 "풍부한 정보(Enriched Info)"를 바탕으로 최종 응답 형식을 생성합니다.
