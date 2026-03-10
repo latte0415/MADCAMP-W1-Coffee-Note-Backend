@@ -55,6 +55,7 @@ async def run_chain(
     """
     try:
         sequence = get_chain(label, input_variables)
+        # result = sequence.invoke(input_variables)
         result = await ainvoke_runnable(
             chain=sequence,
             variables=input_variables,
